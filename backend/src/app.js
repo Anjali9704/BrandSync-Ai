@@ -56,6 +56,21 @@ app.get('/', (req, res) => {
   });
 });
 
+// Auto-connect database for serverless requests
+app.use(async (req, res, next) => {
+  if (req.method === 'OPTIONS' || req.path === '/' || req.path === '/api/v1/health') {
+    return next();
+  }
+
+  try {
+    const { connectDB } = require('./config/db');
+    await connectDB();
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Versioned API Routes Registration
 app.use('/api/v1', routes);
 
