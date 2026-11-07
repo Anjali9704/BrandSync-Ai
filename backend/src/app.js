@@ -46,6 +46,16 @@ if (config.NODE_ENV !== 'test') {
   app.use(morgan('dev'));
 }
 
+// Root status endpoint
+app.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'online',
+    service: 'BrandSync AI Governance Engine API',
+    version: '1.0.0',
+    health: '/api/v1/health',
+  });
+});
+
 // Versioned API Routes Registration
 app.use('/api/v1', routes);
 

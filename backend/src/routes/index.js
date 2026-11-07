@@ -10,6 +10,14 @@ const reportRoutes = require('./report.routes');
 const teamRoutes = require('./team.routes');
 const notificationRoutes = require('./notification.routes');
 
+router.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'online',
+    service: 'BrandSync AI Governance Engine API v1',
+    health: '/api/v1/health',
+  });
+});
+
 router.get('/health', (req, res) => {
   res.status(200).json({
     status: 'healthy',
