@@ -1,8 +1,38 @@
 import axios from 'axios';
 
+function sanitizeBaseUrl(raw) {
+  if (!raw || typeof raw !== 'string') {
+    return '/api/v1';
+  }
+
+  let url = raw.trim();
+
+  // If user only provided /api/v1 or a relative path
+  if (url.startsWith('/')) {
+    return url.replace(/\/+$/, '');
+  }
+
+  // If domain was entered without https:// (e.g. "brand-sync-ai-1jj5.vercel.app")
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    url = `https://${url}`;
+  }
+
+  // Remove trailing slashes
+  url = url.replace(/\/+$/, '');
+
+  // Ensure /api/v1 is present
+  if (!url.endsWith('/api/v1') && !url.includes('/api/')) {
+    url = `${url}/api/v1`;
+  }
+
+  return url;
+}
+
+const apiBaseUrl = sanitizeBaseUrl(import.meta.env.VITE_API_BASE_URL);
+
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1',
-  timeout: 15000,
+  baseURL: apiBaseUrl,
+  timeout: 20000,
   headers: {
     'Content-Type': 'application/json',
   },

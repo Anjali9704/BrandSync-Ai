@@ -23,11 +23,11 @@ const connectDB = async () => {
       const memUri = memoryServer.getUri();
       const conn = await mongoose.connect(memUri);
       console.log(`[DB] Embedded MongoDB Memory Server Connected: ${memUri}`);
-      
+
       // Auto-run seeder on memory db startup so data is populated!
       const seedDatabase = require('../scripts/seedRunner');
       await seedDatabase();
-      
+
       return conn;
     } catch (innerErr) {
       console.error('[DB] Critical: Failed to initialize MongoDB:', innerErr.message);
